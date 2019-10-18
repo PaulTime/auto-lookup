@@ -10,7 +10,7 @@ type TProps = { location: LocationExtended };
 
 const bem = BEM('hint-page');
 
-const useDidUpdate = (cb: EffectCallback, deps?: DependencyList): void => {
+const useDidUpdate = (cb: EffectCallback, deps: DependencyList): void => {
   const mounted = useRef<boolean>(false);
 
   useEffect(() => {
