@@ -16,7 +16,7 @@
     "react-dom": "^16.10.2",
     "react-final-form": "^6.3.0",
     "react-redux": "^7.1.1",
-    "react-redux-fetch-by-actions": "0.0.3",
+    "react-redux-fetch-by-actions": "0.0.5",
     "react-redux-promise-listener-hook": "0.0.2",
     "react-router": "^5.1.2",
     "react-router-dom": "^5.1.2",

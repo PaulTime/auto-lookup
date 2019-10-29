@@ -9,7 +9,9 @@ const Routes: React.FC = () => (
     <Route>
       <CabinetLayout>
         <Switch>
-          <Route component={HintPage}/>
+          <Route>
+            <HintPage />
+          </Route>
         </Switch>
       </CabinetLayout>
     </Route>

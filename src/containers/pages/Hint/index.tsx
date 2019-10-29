@@ -4,15 +4,14 @@ import { useDidUpdate, useLocation } from 'helpers/hooks';
 import BEM from 'services/bem';
 import { useFetch } from 'services/useFetch';
 
-import { TProps } from './types';
 import './index.scss';
 
 const bem = BEM('hint-page');
 
-const HintPage: React.FC<TProps> = () => {
+const HintPage: React.FC = () => {
   const location = useLocation();
 
-  const { loading, injected: result, fetch } = useFetch<object>({
+  const { loading, data: result, fetch } = useFetch<object>({
     start: 'start', resolve: 'resolve',
     payload: { search: location.query.search },
     initialLoading: Boolean(location.query.search),
@@ -47,10 +46,6 @@ const HintPage: React.FC<TProps> = () => {
       </tbody>
     </table>
   );
-};
-
-HintPage.defaultProps = {
-  location: undefined,
 };
 
 export default HintPage;
