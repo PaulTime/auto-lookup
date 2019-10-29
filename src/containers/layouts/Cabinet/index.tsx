@@ -18,4 +18,4 @@ const CabinetLayout: React.FC<TProps> = (props: TProps) => (
   </div>
 );
 
-export default React.memo(CabinetLayout);
+export default CabinetLayout;

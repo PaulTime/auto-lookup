@@ -1,33 +1,22 @@
-import React, { useRef, useEffect, DependencyList, EffectCallback } from 'react';
+import React from 'react';
 
-import { LocationExtended } from 'types';
+import { useDidUpdate, useLocation } from 'helpers/hooks';
 import BEM from 'services/bem';
 import { useFetch } from 'services/useFetch';
 
+import { TProps } from './types';
 import './index.scss';
-
-type TProps = { location: LocationExtended };
 
 const bem = BEM('hint-page');
 
-const useDidUpdate = (cb: EffectCallback, deps: DependencyList): void => {
-  const mounted = useRef<boolean>(false);
+const HintPage: React.FC<TProps> = () => {
+  const location = useLocation();
 
-  useEffect(() => {
-    if (!mounted.current) {
-      mounted.current = true;
-    } else {
-      cb()
-    }
-  }, deps);
-};
-
-const HintPage: React.FC<TProps> = ({ location }: TProps) => {
-  const { loading, injected: result, fetch } =
-    useFetch<object>({
-      start: 'start', resolve: 'resolve',
-      payload: { search: location.query.search }, initialLoading: Boolean(location.query.search),
-    });
+  const { loading, injected: result, fetch } = useFetch<object>({
+    start: 'start', resolve: 'resolve',
+    payload: { search: location.query.search },
+    initialLoading: Boolean(location.query.search),
+  });
 
   useDidUpdate((): void => {
     fetch();

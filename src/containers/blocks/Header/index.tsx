@@ -1,11 +1,10 @@
-import React, { useCallback } from 'react';
-import { withRouter } from 'react-router-dom';
-import { compose } from 'redux';
+import React from 'react';
 import { Form } from 'react-final-form';
-import { RouteComponentProps } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import qs from 'query-string';
 
 import { TOnSubmit } from 'types/forms';
+import { useLocation } from 'helpers/hooks';
 import BEM from 'services/bem';
 import SearchForm from 'containers/forms/Search';
 
@@ -13,11 +12,13 @@ import './index.scss';
 
 const bem = BEM('header');
 
-const Header: React.FC<RouteComponentProps> = ({ location, history }: RouteComponentProps) => {
+const Header: React.FC = () => {
+  const history = useHistory();
+  const location = useLocation();
 
-  const onsubmit: TOnSubmit = useCallback((values) => {
+  const onsubmit: TOnSubmit = (values) => {
     history.replace(`${location.pathname}?${qs.stringify(values)}`);
-  }, [location.pathname]);
+  };
 
   return (
     <header className={bem()}>
@@ -32,7 +33,4 @@ const Header: React.FC<RouteComponentProps> = ({ location, history }: RouteCompo
   )
 };
 
-export default compose(
-  withRouter,
-  React.memo,
-)(Header);
+export default Header;
