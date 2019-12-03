@@ -2,8 +2,10 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const TerserJSPlugin = require('terser-webpack-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
-const { PUBLIC_PATH = '/', API_HOST = 'http://localhost:8080', NODE_ENV = 'development' } = process.env;
+const { PUBLIC_PATH = '/', API_HOST = 'http://localhost:8080' } = process.env;
 
 module.exports = {
   target: 'web',
@@ -12,33 +14,18 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'build'),
     publicPath: PUBLIC_PATH,
-    filename: 'static/bundle.js',
-    chunkFilename: 'static/js/[name].chunk.js',
+    filename: 'static/bundle.[hash].js',
+    chunkFilename: 'static/js/[name].[hash].chunk.js',
   },
 
   optimization: {
     splitChunks: { chunks: 'all' },
-    noEmitOnErrors: true,
+    minimizer: [
+      new TerserJSPlugin({}),
+      new OptimizeCSSAssetsPlugin({}),
+    ],
   },
-
-  watch: true,
-  devtool: 'source-map',
-  mode: 'development',
-
-  devServer: {
-    contentBase: path.resolve(__dirname, 'public'),
-    publicPath: PUBLIC_PATH,
-    port: 3000,
-    inline: true,
-    hotOnly: true,
-    host: '0.0.0.0',
-    proxy: {
-      '/api': API_HOST,
-    },
-    historyApiFallback: {
-      index: PUBLIC_PATH,
-    },
-  },
+  mode: 'production',
 
   resolve: {
     extensions: [".ts", ".tsx", ".js"],
@@ -59,10 +46,7 @@ module.exports = {
         use: [
           {
             loader: MiniCssExtractPlugin.loader,
-            options: {
-              publicPath: PUBLIC_PATH,
-              hmr: true,
-            },
+            options: { publicPath: PUBLIC_PATH },
           },
           'css-loader',
           'postcss-loader',
@@ -76,11 +60,11 @@ module.exports = {
       template: path.resolve(__dirname, 'public/index.html'),
     }),
     new MiniCssExtractPlugin({
-      filename: '[name].css',
-      chunkFilename: '[id].css',
+      filename: 'static/css/[name].[hash].css',
+      chunkFilename: 'static/css/[id].[hash].css',
     }),
     new webpack.DefinePlugin({
-      'process.env': JSON.stringify({ NODE_ENV, API_HOST, PUBLIC_PATH }),
+      'process.env': JSON.stringify({ NODE_ENV: 'production', API_HOST, PUBLIC_PATH }),
     }),
     new webpack.NamedModulesPlugin(),
     new webpack.HotModuleReplacementPlugin(),
