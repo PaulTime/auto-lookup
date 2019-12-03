@@ -5,6 +5,6 @@ export interface AnyObject {
   [key: string]: any; // eslint-disable-line @typescript-eslint/no-explicit-any
 }
 
-export type LocationExtended = H.Location & {
+export type LocationWithQuery = H.Location & {
   query: ParsedQuery;
 }

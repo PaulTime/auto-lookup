@@ -1,56 +1,63 @@
-import React from 'react';
+import React, { Suspense } from 'react';
+import { useSuspenseQuery, QueryResponse } from 'react-fetching-library';
 
-import { LocationExtended } from 'types';
 import BEM from 'services/bem';
-import Query from 'services/query';
+import { useLocationWithQuery } from 'helpers/hooks';
+import { getCarsRecourse, TCarInfoResourceParams, TCarInfoResource } from 'resources/carInfo';
 
 import './index.scss';
 
-type TProps = { location: LocationExtended };
+type TCarsTable = { loading?: boolean };
 
 const bem = BEM('hint-page');
 
-const HOST = process.env.NODE_ENV === 'production' ? process.env.API_HOST : '';
+const CarsTable: React.FC<TCarsTable> = ({ loading }: TCarsTable) => {
+  const { query } = useLocationWithQuery();
+  const response =
+    loading
+      ? { payload: {} }
+      : useSuspenseQuery<TCarInfoResource>(getCarsRecourse(query as TCarInfoResourceParams));
 
-const HintPage: React.FC<TProps> = ({ location }: TProps) => (
-  <Query
-    action={(): Promise<{}> => window
-      .fetch(`${HOST}/api/v1/car-info/${location.query.search}`)
-      .then(response => response.json())
-    }
-    loader={false}
-    when={Boolean(location.query.search)}
-    watch={[location.query.search]}
-  >
-    {({ loading, result }: { loading: boolean; result: { [field: string]: string } }): React.ReactNode => (
-      <table className={bem()}>
-        <caption className={bem('caption')}>Search result</caption>
+  const { payload: { result = undefined } } = response as QueryResponse;
 
-        <thead className={bem('head')}>
-          <tr>
-            <th>owner</th>
-            <th>year</th>
-            <th>crashesCount</th>
-            <th>ownersCount</th>
-          </tr>
-        </thead>
+  // useDidUpdate(() => {
+  //
+  // }, [query.search]);
 
-        <tbody className={bem('body', { loading })}>
-          <tr>
-            {result ? Object.entries(result).map(([field, value]) => (
-              <td key={field}><span>{value}</span></td>
-            )) : (
-              <td colSpan={4}><span className={bem('placeholder')}>try to search cars</span></td>
-            )}
-          </tr>
-        </tbody>
-      </table>
-    )}
-  </Query>
-);
+  return (
+    <table className={bem()}>
+      <caption className={bem('caption')}>Search result</caption>
 
-HintPage.defaultProps = {
-  location: undefined,
+      <thead className={bem('head')}>
+        <tr>
+          <th>owner</th>
+          <th>year</th>
+          <th>crashesCount</th>
+          <th>ownersCount</th>
+        </tr>
+      </thead>
+
+      <tbody className={bem('body', { loading })}>
+        <tr>
+          {result ? Object.entries(result).map(([field, value]) => (
+            <td key={field}><span>{value}</span></td>
+          )) : (
+            <td colSpan={4}><span className={bem('placeholder')}>try to search cars</span></td>
+          )}
+        </tr>
+      </tbody>
+    </table>
+  );
 };
+
+CarsTable.defaultProps = {
+  loading: false,
+};
+
+const HintPage: React.FC = () => (
+  <Suspense fallback={<CarsTable loading={true} />}>
+    <CarsTable />
+  </Suspense>
+);
 
 export default HintPage;
