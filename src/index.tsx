@@ -1,33 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
-import { ClientContextProvider } from 'react-fetching-library';
 
-import store from 'store';
-import Routes from 'containers/routes';
-import { getAPIClient } from 'resources/api';
-
-import './reset.css';
+import Root from 'components/Root';
 
 function render(Component: React.ElementType): void {
   ReactDOM.render(
-    <Provider store={store}>
-      <ClientContextProvider client={getAPIClient()}>
-        <BrowserRouter basename={process.env.PUBLIC_PATH}>
-          <Component />
-        </BrowserRouter>
-      </ClientContextProvider>
-    </Provider>,
+    <Component />,
     document.getElementById('root') as HTMLDivElement
   );
 }
 
-render(Routes);
+render(Root);
 
 if (process.env.NODE_ENV === 'development' && module.hot) {
-  module.hot.accept('./containers/routes', () => {
-    const newRoutes = require('./containers/routes').default;
-    render(newRoutes);
+  module.hot.accept('./components/Root', () => {
+    const newApp = require('./components/Root').default;
+    render(newApp);
   });
 }
