@@ -1,13 +1,13 @@
 import React from 'react';
 
-import { AnyObject } from 'types';
-
 export type TValue<V = any> = V; // eslint-disable-line @typescript-eslint/no-explicit-any
 export type TError<E = string | undefined> = E;
 export type TValidator<Value = TValue, E = TError> = { (V: Value): E };
 
 export type THandleSubmit = (
   event?: React.SyntheticEvent<HTMLFormElement>
-) => Promise<AnyObject | undefined> | undefined
+) => Promise<object | undefined> | undefined;
 
-export type TOnSubmit = (values?: object) => Promise<AnyObject | undefined> | undefined | void
+export type TOnSubmit = (
+  values?: object
+) => Promise<object | undefined> | undefined | void;

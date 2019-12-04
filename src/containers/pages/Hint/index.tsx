@@ -1,28 +1,27 @@
 import React, { Suspense } from 'react';
-import { useSuspenseQuery, QueryResponse } from 'react-fetching-library';
 
 import BEM from 'services/bem';
-import { useLocationWithQuery } from 'helpers/hooks';
-import { getCarsRecourse, TCarInfoResourceParams, TCarInfoResource } from 'resources/carInfo';
+import { useLocationWithQuery } from 'hooks';
+import { useSuspenseQuery } from 'hooks/fetch';
+import {
+  getCarsRecourse,
+  TCarInfoResourceParams,
+  TCarInfoResource
+} from 'resources/carInfo';
 
 import './index.scss';
 
-type TCarsTable = { loading?: boolean };
+type TCarsTable = { suspend?: boolean };
 
 const bem = BEM('hint-page');
 
-const CarsTable: React.FC<TCarsTable> = ({ loading }: TCarsTable) => {
+const CarsTable: React.FC<TCarsTable> = ({ suspend }: TCarsTable) => {
   const { query } = useLocationWithQuery();
-  const response =
-    loading
-      ? { payload: {} }
-      : useSuspenseQuery<TCarInfoResource>(getCarsRecourse(query as TCarInfoResourceParams));
 
-  const { payload: { result = undefined } } = response as QueryResponse;
-
-  // useDidUpdate(() => {
-  //
-  // }, [query.search]);
+  const { payload = {} } = useSuspenseQuery<{ result?: TCarInfoResource }>(
+    getCarsRecourse(query as TCarInfoResourceParams),
+    Boolean(query.search) && !suspend
+  );
 
   return (
     <table className={bem()}>
@@ -37,12 +36,18 @@ const CarsTable: React.FC<TCarsTable> = ({ loading }: TCarsTable) => {
         </tr>
       </thead>
 
-      <tbody className={bem('body', { loading })}>
+      <tbody className={bem('body', { loading: suspend })}>
         <tr>
-          {result ? Object.entries(result).map(([field, value]) => (
-            <td key={field}><span>{value}</span></td>
-          )) : (
-            <td colSpan={4}><span className={bem('placeholder')}>try to search cars</span></td>
+          {payload.result ? (
+            Object.entries(payload.result).map(([field, value]) => (
+              <td key={field}>
+                <span>{value}</span>
+              </td>
+            ))
+          ) : (
+            <td colSpan={4}>
+              <span className={bem('placeholder')}>try to search cars</span>
+            </td>
           )}
         </tr>
       </tbody>
@@ -51,11 +56,11 @@ const CarsTable: React.FC<TCarsTable> = ({ loading }: TCarsTable) => {
 };
 
 CarsTable.defaultProps = {
-  loading: false,
+  suspend: false
 };
 
 const HintPage: React.FC = () => (
-  <Suspense fallback={<CarsTable loading={true} />}>
+  <Suspense fallback={<CarsTable suspend />}>
     <CarsTable />
   </Suspense>
 );

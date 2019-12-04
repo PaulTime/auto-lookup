@@ -6,20 +6,21 @@ import { ClientContextProvider } from 'react-fetching-library';
 
 import store from 'store';
 import Routes from 'containers/routes';
-import { client } from 'helpers/fetch';
+import { getAPIClient } from 'resources/api';
 
 import './reset.css';
 
 function render(Component: React.ElementType): void {
-  ReactDOM.render((
+  ReactDOM.render(
     <Provider store={store}>
-      <ClientContextProvider client={client}>
+      <ClientContextProvider client={getAPIClient()}>
         <BrowserRouter basename={process.env.PUBLIC_PATH}>
           <Component />
         </BrowserRouter>
       </ClientContextProvider>
-    </Provider>
-  ), document.getElementById('root') as HTMLDivElement);
+    </Provider>,
+    document.getElementById('root') as HTMLDivElement
+  );
 }
 
 render(Routes);

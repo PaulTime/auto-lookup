@@ -4,7 +4,7 @@ export type TCarInfoResourceParams = { search: string };
 
 export const getCarsRecourse = (params: TCarInfoResourceParams): Action => ({
   method: 'POST',
-  endpoint: `/api/v1/car-info/${params.search}`,
+  endpoint: `/api/v1/car-info/${params.search}`
 });
 
 export type TCarInfoResource = {
@@ -13,4 +13,4 @@ export type TCarInfoResource = {
   readonly year: number | undefined;
   readonly crashesCount: number | undefined;
   readonly ownersCount: number | undefined;
-}
+};
