@@ -1,5 +1,3 @@
 import bemJoin from 'bem-join';
 
-export default bemJoin({
-  modifierSeparator: '_',
-});
+export default bemJoin({ modifierSeparator: '_' });

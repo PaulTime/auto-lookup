@@ -13,11 +13,16 @@ import './index.scss';
 
 const bem = BEM('header');
 
-const Header: React.FC<RouteComponentProps> = ({ location, history }: RouteComponentProps) => {
-
-  const onsubmit: TOnSubmit = useCallback((values) => {
-    history.replace(`${location.pathname}?${qs.stringify(values)}`);
-  }, [location.pathname]);
+const Header: React.FC<RouteComponentProps> = ({
+  location,
+  history
+}: RouteComponentProps) => {
+  const onsubmit: TOnSubmit = useCallback(
+    values => {
+      history.replace(`${location.pathname}?${qs.stringify(values)}`);
+    },
+    [location.pathname]
+  );
 
   return (
     <header className={bem()}>
@@ -29,10 +34,7 @@ const Header: React.FC<RouteComponentProps> = ({ location, history }: RouteCompo
         initialValues={qs.parse(location.search)}
       />
     </header>
-  )
+  );
 };
 
-export default compose(
-  withRouter,
-  React.memo,
-)(Header);
+export default compose(withRouter, React.memo)(Header);

@@ -16,10 +16,7 @@ const SearchForm: React.FC<TProps> = ({ handleSubmit }: TProps) => (
   <form onSubmit={handleSubmit} className={bem()}>
     <Field
       name="search"
-      validate={composeValidators(
-        required,
-        carNumber,
-      )}
+      validate={composeValidators(required, carNumber)}
       component={TextInput}
       id="search"
       placeholder="Car number"
