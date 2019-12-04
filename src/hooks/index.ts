@@ -4,7 +4,6 @@ import qs from 'query-string';
 
 import { LocationWithQuery } from 'types';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const useLocationWithQuery = (): LocationWithQuery => {
   const location = useLocation();
 
