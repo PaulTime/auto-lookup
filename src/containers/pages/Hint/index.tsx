@@ -1,6 +1,5 @@
 import React, { Suspense } from 'react';
 
-import BEM from 'services/bem';
 import { useLocationWithQuery } from 'hooks';
 import { useSuspenseQuery } from 'hooks/fetch';
 import {
@@ -9,11 +8,9 @@ import {
   TCarInfoResource
 } from 'resources/carInfo';
 
-import './index.scss';
+import styles from './Hint.scss';
 
 type TCarsTable = { suspend?: boolean };
-
-const bem = BEM('hint-page');
 
 const CarsTable: React.FC<TCarsTable> = ({ suspend }: TCarsTable) => {
   const { query } = useLocationWithQuery<TCarInfoResourceParams>();
@@ -24,10 +21,10 @@ const CarsTable: React.FC<TCarsTable> = ({ suspend }: TCarsTable) => {
   );
 
   return (
-    <table className={bem()}>
-      <caption className={bem('caption')}>Search result</caption>
+    <table className={styles.root}>
+      <caption className={styles.caption}>Search result</caption>
 
-      <thead className={bem('head')}>
+      <thead className={styles.head}>
         <tr>
           <th>owner</th>
           <th>year</th>
@@ -36,7 +33,7 @@ const CarsTable: React.FC<TCarsTable> = ({ suspend }: TCarsTable) => {
         </tr>
       </thead>
 
-      <tbody className={bem('body', { loading: suspend })}>
+      <tbody className={styles.body}>
         <tr>
           {payload.result ? (
             Object.entries(payload.result).map(([field, value]) => (
@@ -46,7 +43,7 @@ const CarsTable: React.FC<TCarsTable> = ({ suspend }: TCarsTable) => {
             ))
           ) : (
             <td colSpan={4}>
-              <span className={bem('placeholder')}>try to search cars</span>
+              <span className={styles.placeholder}>try to search cars</span>
             </td>
           )}
         </tr>

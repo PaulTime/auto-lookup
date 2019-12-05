@@ -1,0 +1,36 @@
+.root {
+  width: 100%;
+}
+
+.caption {
+  padding-bottom: 10px;
+}
+
+.head th {
+  padding: 4px 0;
+}
+
+.head th:first-child {
+  width: 40%;
+}
+
+.head th:not(:first-child) {
+  width: 20%;
+}
+
+.body td {
+  padding: 4px 0;
+  text-align: center;
+}
+
+.body td:first-child:last-child {
+  padding: 34px 0;
+}
+
+.placeholder {
+  display: block;
+  margin: 0 auto;
+  padding: 10px;
+  text-align: center;
+}
+

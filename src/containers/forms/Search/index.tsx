@@ -1,28 +1,26 @@
 import React from 'react';
 import { Field } from 'react-final-form';
+import { combine } from 'redux-form-validators';
 
 import { THandleSubmit } from 'types/forms';
-import BEM from 'services/bem';
-import { composeValidators, required, carNumber } from 'helpers/validators';
+import { required, carNumber } from 'helpers/validators';
 import TextInput from 'components/TextInput';
 
-import './index.scss';
+import styles from './SearchForm.scss';
 
 type TProps = { handleSubmit: THandleSubmit };
 
-const bem = BEM('search-form');
-
 const SearchForm: React.FC<TProps> = ({ handleSubmit }: TProps) => (
-  <form onSubmit={handleSubmit} className={bem()}>
+  <form onSubmit={handleSubmit} className={styles.searchForm}>
     <Field
       name="search"
-      validate={composeValidators(required, carNumber)}
+      validate={combine(required, carNumber)}
       component={TextInput}
       id="search"
       placeholder="Car number"
     />
 
-    <button className={bem('submit')} type="submit">
+    <button className={styles.submit} type="submit">
       Search
     </button>
   </form>
