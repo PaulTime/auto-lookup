@@ -1,40 +1,29 @@
-import React, { useCallback } from 'react';
-import { withRouter } from 'react-router-dom';
-import { compose } from 'redux';
+import React from 'react';
+import { useHistory } from 'react-router';
 import { Form } from 'react-final-form';
-import { RouteComponentProps } from 'react-router-dom';
 import qs from 'query-string';
 
 import { TOnSubmit } from 'types/forms';
-import BEM from 'services/bem';
+import { useLocationWithQuery } from 'hooks';
 import SearchForm from 'containers/forms/Search';
 
-import './index.scss';
+import styles from './Header.scss';
 
-const bem = BEM('header');
+const Header: React.FC = () => {
+  const history = useHistory();
+  const { pathname, query } = useLocationWithQuery();
 
-const Header: React.FC<RouteComponentProps> = ({
-  location,
-  history
-}: RouteComponentProps) => {
-  const onsubmit: TOnSubmit = useCallback(
-    values => {
-      history.replace(`${location.pathname}?${qs.stringify(values)}`);
-    },
-    [location.pathname]
-  );
+  const onsubmit: TOnSubmit = values => {
+    history.replace(`${pathname}?${qs.stringify(values)}`);
+  };
 
   return (
-    <header className={bem()}>
-      <h1 className={bem('title')}>header block</h1>
+    <header className={styles.header}>
+      <h1>header block</h1>
 
-      <Form
-        onSubmit={onsubmit}
-        component={SearchForm}
-        initialValues={qs.parse(location.search)}
-      />
+      <Form onSubmit={onsubmit} component={SearchForm} initialValues={query} />
     </header>
   );
 };
 
-export default compose(withRouter, React.memo)(Header);
+export default Header;

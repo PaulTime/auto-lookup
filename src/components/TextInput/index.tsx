@@ -1,11 +1,7 @@
 import React from 'react';
 import { FieldInputProps, FieldMetaState } from 'react-final-form';
 
-import BEM from 'services/bem';
-
-import './index.scss';
-
-const bem = BEM('text-input');
+import styles from './TextInput.scss';
 
 type TProps = {
   input: FieldInputProps<string, HTMLInputElement>;
@@ -14,23 +10,23 @@ type TProps = {
   placeholder?: string;
 };
 
-const TextInput: React.FC<TProps> = ({ input, meta, id, placeholder }: TProps) => (
-  <label htmlFor={id} className={bem()}>
-    <input
-      type="text"
-      {...input}
-      id={id}
-      placeholder={placeholder}
-    />
+const TextInput: React.FC<TProps> = ({
+  input,
+  meta,
+  id,
+  placeholder
+}: TProps) => (
+  <label htmlFor={id} className={styles.root}>
+    <input type="text" {...input} id={id} placeholder={placeholder} />
 
     {meta.touched && meta.error && (
-      <span className={bem('error')}>{meta.error}</span>
+      <span className={styles.error}>{meta.error}</span>
     )}
   </label>
 );
 
 TextInput.defaultProps = {
-  placeholder: undefined,
+  placeholder: undefined
 };
 
-export default React.memo(TextInput);
+export default TextInput;

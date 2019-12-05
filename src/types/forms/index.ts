@@ -1,8 +1,9 @@
 import React from 'react';
 
-export type TValue<V = any> = V; // eslint-disable-line @typescript-eslint/no-explicit-any
-export type TError<E = string | undefined> = E;
-export type TValidator<Value = TValue, E = TError> = { (V: Value): E };
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type TValidator<Value = any> = {
+  (V: Value): () => string | undefined;
+};
 
 export type THandleSubmit = (
   event?: React.SyntheticEvent<HTMLFormElement>

@@ -6,9 +6,9 @@ import { ClientContextProvider } from 'react-fetching-library';
 import store from 'store';
 import { getAPIClient } from 'resources/api';
 
-import App from './App';
-
 import './reset.css';
+
+import App from './App';
 
 const Root: React.FC = () => (
   <Provider store={store}>

@@ -15,58 +15,61 @@ module.exports = {
     path: path.resolve(__dirname, 'build'),
     publicPath: PUBLIC_PATH,
     filename: 'static/bundle.[hash].js',
-    chunkFilename: 'static/js/[name].[hash].chunk.js',
+    chunkFilename: 'static/js/[name].[hash].chunk.js'
   },
 
   optimization: {
     splitChunks: { chunks: 'all' },
-    minimizer: [
-      new TerserJSPlugin({}),
-      new OptimizeCSSAssetsPlugin({}),
-    ],
+    minimizer: [new TerserJSPlugin({}), new OptimizeCSSAssetsPlugin({})]
   },
   mode: 'production',
 
   resolve: {
-    extensions: [".ts", ".tsx", ".js"],
-    modules: [
-      'src',
-      'node_modules',
-    ],
+    extensions: ['.ts', '.tsx', '.js', '.css', '.scss'],
+    modules: ['src', 'node_modules']
   },
   module: {
     rules: [
       {
         test: /\.(jsx?|tsx?)$/,
         exclude: /node_modules/,
-        loader: 'babel-loader',
+        loader: 'babel-loader'
       },
       {
         test: /\.(sa|sc|c)ss$/,
         use: [
           {
             loader: MiniCssExtractPlugin.loader,
-            options: { publicPath: PUBLIC_PATH },
+            options: { publicPath: PUBLIC_PATH }
           },
-          'css-loader',
-          'postcss-loader',
-        ],
-      },
-    ],
+          {
+            loader: 'css-loader',
+            options: {
+              modules: { localIdentName: '[[hash:base64]' }
+            }
+          },
+          'postcss-loader'
+        ]
+      }
+    ]
   },
   plugins: [
     new HtmlWebpackPlugin({
       inject: true,
-      template: path.resolve(__dirname, 'public/index.html'),
+      template: path.resolve(__dirname, 'public/index.html')
     }),
     new MiniCssExtractPlugin({
       filename: 'static/css/[name].[hash].css',
-      chunkFilename: 'static/css/[id].[hash].css',
+      chunkFilename: 'static/css/[id].[hash].css'
     }),
     new webpack.DefinePlugin({
-      'process.env': JSON.stringify({ NODE_ENV: 'production', API_HOST, PUBLIC_PATH }),
+      'process.env': JSON.stringify({
+        NODE_ENV: 'production',
+        API_HOST,
+        PUBLIC_PATH
+      })
     }),
     new webpack.NamedModulesPlugin(),
-    new webpack.HotModuleReplacementPlugin(),
-  ],
+    new webpack.HotModuleReplacementPlugin()
+  ]
 };
