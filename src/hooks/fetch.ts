@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import {
   useQuery,
   Action,
+  UseQueryResponse,
   QueryResponse,
   convertActionToBase64
 } from 'react-fetching-library';
@@ -10,7 +11,7 @@ import {
 export const useSuspenseQuery = <R, T = any>(
   action: Action<T>,
   filter?: boolean
-): never | QueryResponse<R> => {
+): never | UseQueryResponse<R> => {
   const fetchPromise = useRef<null | Promise<QueryResponse<R>>>(null);
   const response = useQuery<R>(action, false);
 
@@ -24,5 +25,11 @@ export const useSuspenseQuery = <R, T = any>(
     throw fetchPromise.current;
   }
 
-  return response;
+  return {
+    ...response,
+    query: (): Promise<QueryResponse<R>> => {
+      fetchPromise.current = response.query();
+      return fetchPromise.current;
+    }
+  };
 };

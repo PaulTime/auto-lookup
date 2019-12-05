@@ -16,10 +16,10 @@ type TCarsTable = { suspend?: boolean };
 const bem = BEM('hint-page');
 
 const CarsTable: React.FC<TCarsTable> = ({ suspend }: TCarsTable) => {
-  const { query } = useLocationWithQuery();
+  const { query } = useLocationWithQuery<TCarInfoResourceParams>();
 
   const { payload = {} } = useSuspenseQuery<{ result?: TCarInfoResource }>(
-    getCarsRecourse(query as TCarInfoResourceParams),
+    getCarsRecourse(query),
     Boolean(query.search) && !suspend
   );
 

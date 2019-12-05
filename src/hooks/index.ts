@@ -1,13 +1,14 @@
 import { useEffect, useRef, EffectCallback, DependencyList } from 'react';
 import { useLocation } from 'react-router';
-import qs from 'query-string';
+import { Location } from 'history';
+import qs, { ParsedQuery } from 'query-string';
 
-import { LocationWithQuery } from 'types';
-
-export const useLocationWithQuery = (): LocationWithQuery => {
+export const useLocationWithQuery = <Q = ParsedQuery>(): Location & {
+  query: Q;
+} => {
   const location = useLocation();
 
-  return { ...location, query: qs.parse(location.search) };
+  return { ...location, query: (qs.parse(location.search) as unknown) as Q };
 };
 
 export const useDidUpdate = (
