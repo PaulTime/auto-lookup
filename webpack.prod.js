@@ -45,10 +45,9 @@ module.exports = {
           {
             loader: 'css-loader',
             options: {
-              modules: { localIdentName: '[[hash:base64]' }
+              modules: { localIdentName: '[hash:base64]' }
             }
-          },
-          'postcss-loader'
+          }
         ]
       }
     ]
@@ -68,8 +67,6 @@ module.exports = {
         API_HOST,
         PUBLIC_PATH
       })
-    }),
-    new webpack.NamedModulesPlugin(),
-    new webpack.HotModuleReplacementPlugin()
+    })
   ]
 };
